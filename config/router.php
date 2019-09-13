@@ -36,7 +36,6 @@ class Router {
             if (!key_exists(1, $requestUrlVars)) {
                 $requestUrlVars[1] = "";
             }
-            echo "<pre>";
             $method = $class->getMethod($route[1][$method][$requestUrlVars[1]][0]);
             $method->invoke($obj);
         } catch (Exception $ex) {

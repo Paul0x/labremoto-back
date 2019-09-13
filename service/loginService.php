@@ -22,8 +22,7 @@ use \Firebase\JWT\JWT;
 class LoginService {
 
     
-    public function authUser($login, $password) {
-        
+    public function authUser($login, $password) {        
         
         if(!isset($password) || !isset($login)) {
             throw new Exception("001 - Login ou senha não informados.");
@@ -32,20 +31,23 @@ class LoginService {
             "iss" => Config::$iss,
             "aud" => Config::$aud,
             "data" => array(
-                "user" => "Paulo"
+                "user" => $login
             )
         );
 
         $jwt = JWT::encode($token, Config::$key);
-        // set response code
         http_response_code(200);
 
         echo json_encode(
                 array(
-                    "message" => "User was updated.",
-                    "jwt" => $jwt
+                    "token" => $jwt
                 )
         );
+    }
+    
+    
+    public static function checkToken($token) {
+        
     }
 
 }
