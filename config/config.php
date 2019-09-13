@@ -13,7 +13,7 @@
  */
 
 class Config {
-    public static $key = "rionwerodS0SE@@#%@@@#akdmgnalq";
+    public static $key = "rionwerodS0SE@@#%@@@#akdmgnalqa34ggda";
     public static $iss = "http://labremoto.org";
     public static $aud = "http://labremoto.com";
 }

@@ -17,14 +17,14 @@ require_once __DIR__ . '/../lib/php-jwt/src/BeforeValidException.php';
 require_once __DIR__ . '/../lib/php-jwt/src/ExpiredException.php';
 require_once __DIR__ . '/../lib/php-jwt/src/SignatureInvalidException.php';
 require_once __DIR__ . '/../lib/php-jwt/src/JWT.php';
+
 use \Firebase\JWT\JWT;
 
 class LoginService {
 
-    
-    public function authUser($login, $password) {        
-        
-        if(!isset($password) || !isset($login)) {
+    public function authUser($login, $password) {
+
+        if (!isset($password) || !isset($login)) {
             throw new Exception("001 - Login ou senha não informados.");
         }
         $token = array(
@@ -44,10 +44,25 @@ class LoginService {
                 )
         );
     }
-    
-    
-    public static function checkToken($token) {
-        
+
+    public static function checkToken() {
+        $token = null;
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = array();
+            preg_match('/Bearer (.*)/', $headers['Authorization'], $matches);
+            if (isset($matches[1])) {
+                $token = $matches[1];
+            }
+            try {
+                // decode jwt
+                $decoded = JWT::decode($token, Config::$key, array('HS256'));
+                return true;
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+        return false;
     }
 
 }

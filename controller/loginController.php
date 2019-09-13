@@ -31,6 +31,15 @@ class LoginController {
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
+    
+    public function checkAuth() {
+        try {
+//            if($this->)
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
 
 }
 
