@@ -13,9 +13,18 @@
  */
 
 class Config {
+
     public static $key = "rionwerodS0SE@@#%@@@#akdmgnalqa34ggda";
     public static $iss = "http://labremoto.org";
     public static $aud = "http://labremoto.com";
+    public static $dbConfiguration = [
+        'database_type' => 'mysql',
+        'database_name' => 'name',
+        'server' => 'localhost',
+        'username' => 'your_username',
+        'password' => 'your_password',
+    ];
+
 }
 
 ?>
