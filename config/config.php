@@ -19,10 +19,10 @@ class Config {
     public static $aud = "http://labremoto.com";
     public static $dbConfiguration = [
         'database_type' => 'mysql',
-        'database_name' => 'name',
+        'database_name' => 'labremoto',
         'server' => 'localhost',
-        'username' => 'your_username',
-        'password' => 'your_password',
+        'username' => 'root',
+        'password' => 'praisekek18',
     ];
 
 }

@@ -13,16 +13,24 @@
  */
 
 require_once("routes.php");
+require_once(__DIR__ . "/../service/loginService.php");
 $files = glob(__DIR__ . "/../controller/*.php");
 foreach ($files as $file) {
     require($file);
 }
 
 class Router {
+    
+    public static $whiteList = ["login"];
 
     public static function init() {
         $method = $_SERVER['REQUEST_METHOD'];
         $requestUrlVars = explode("/", $_GET['vars']);
+        if(!Router::validateToken($requestUrlVars)) {
+            http_response_code(400);
+            echo json_encode(["status" => 403, "error" => "Sem permissão para acessar o recurso."]);
+            return;
+        }
         Router::route($requestUrlVars, $method);
     }
 
@@ -42,6 +50,13 @@ class Router {
             echo json_encode(["status" => 404, "error" => "Rota não encontrada"]);
         }
         //$class = new ReflectionClass($requestUrlVars[0]);
+    }
+    
+    private static function validateToken($url) {
+        if(in_array($url[0], Router::$whiteList)) {
+            return true;
+        }
+        return LoginService::checkToken();
     }
 
 }

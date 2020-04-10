@@ -22,16 +22,28 @@ use \Firebase\JWT\JWT;
 
 class LoginService {
 
+    private $repository;
+    
+    function __construct() {
+        $this->repository = new LoginRepository();        
+    }
+
     public function authUser($login, $password) {
 
-        if (!isset($password) || !isset($login)) {
-            throw new Exception("001 - Login ou senha não informados.");
+        if (!isset($password) || !isset($login) || trim($login) == "" || trim($password) == "") {
+            throw new Exception("Dados necessários não foram preenchidos (1).");
         }
-        $token = array(
+        $user = $this->repository->findUserByIdAndPassword($login, $password);
+        if(!is_array($user) || !$user[0]) {
+            throw new Exception("Usuário não existente ou senha inválida (2).");
+        }
+                $token = array(
             "iss" => Config::$iss,
             "aud" => Config::$aud,
             "data" => array(
-                "user" => $login
+                "matricula" => $user[0]["matricula"],
+                "nome" => $user[0]["nome"],
+                "perfil" => "1"
             )
         );
 

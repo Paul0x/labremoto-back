@@ -13,7 +13,7 @@
 require_once(__DIR__ . "/../lib/medoo/medoo.php");
 use Medoo\Medoo;
 
-class LoginRepository {
+class LaboratorioRepository {
     
     private $db;
     
@@ -21,10 +21,9 @@ class LoginRepository {
         $this->db = new Medoo(Config::$dbConfiguration);
     }
     
-    public function findUserByIdAndPassword($login, $password) {
-        $password = md5($password);
-        $user = $this->db->select('usuario', '*', ["matricula" => $login, "senha" => $password]);
-        return $user;
+    public function findSessaoAtiva() {
+        $sessao = $this->db->select('sessao', ["ativo","dt_fim"], ["ativo" => true]);
+        return $sessao;
     }
     
 }

@@ -36,6 +36,15 @@ class Routes {
                 ],
                 "PUT" => [],
                 "DELETE" => []
+            ]],
+        "laboratorio" => ["LaboratorioController",
+            [
+                "GET" => [
+                    "sessao" => ["findSessaoAtiva", []]
+                ],
+                "POST" => [],
+                "PUT" => [],
+                "DELETE" => []
             ]]
     ];
 
