@@ -40,9 +40,11 @@ class Routes {
         "laboratorio" => ["LaboratorioController",
             [
                 "GET" => [
-                    "sessao" => ["findSessaoAtiva", []]
+                    "sessao-ativa" => ["findSessaoAtiva", []]
                 ],
-                "POST" => [],
+                "POST" => [
+                    "sessao" => ["startSessao", []]
+                ],
                 "PUT" => [],
                 "DELETE" => []
             ]]

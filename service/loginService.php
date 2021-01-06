@@ -34,7 +34,7 @@ class LoginService {
             throw new Exception("Dados necessários não foram preenchidos (1).");
         }
         $user = $this->repository->findUserByIdAndPassword($login, $password);
-        if(!is_array($user) || !$user[0]) {
+        if(!is_array($user) || count($user) == 0) {
             throw new Exception("Usuário não existente ou senha inválida (2).");
         }
                 $token = array(
@@ -75,6 +75,26 @@ class LoginService {
             }
         }
         return false;
+    }
+    
+    public function getToken() {
+        $token = null;
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = array();
+            preg_match('/Bearer (.*)/', $headers['Authorization'], $matches);
+            if (isset($matches[1])) {
+                $token = $matches[1];
+            }
+            try {
+                // decode jwt
+                $decoded = JWT::decode($token, Config::$key, array('HS256'));
+                return $decoded->data;
+            } catch (Exception $e) {
+                return null;
+            }
+        }
+        return null;
     }
 
 }

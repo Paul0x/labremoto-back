@@ -31,6 +31,17 @@ class LaboratorioController {
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
+    
+    public function startSessao() {
+        try {
+            echo $this->laboratorioService->startSessao();            
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+
+        }
+        
+    }
 
 }
 
