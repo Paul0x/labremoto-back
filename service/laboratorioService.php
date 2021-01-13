@@ -14,6 +14,7 @@
 
 require_once __DIR__ . '/../repository/laboratorioRepository.php';
 require_once __DIR__ . '/../entities/sessao.php';
+require_once __DIR__ . '/../entities/experimento.php';
 
 class LaboratorioService {
 
@@ -28,10 +29,19 @@ class LaboratorioService {
     public function findSessaoAtiva() {
         $sessaoAtiva = $this->repository->findSessaoAtiva();
         if (!is_array($sessaoAtiva) || count($sessaoAtiva) == 0) {
-            return null;
+            return json_encode(null);
         }
         return json_encode($sessaoAtiva[0]);
     }
+    
+    public function findExperimentos() {
+        return json_encode(InputHelper::utf8ize($this->repository->findExperimentos()));
+    }
+    
+    public function getExperimentoAtivo() {
+        return json_encode(InputHelper::utf8ize($this->repository->getExperimentoAtivo()[0]));
+    }
+
 
     public function startSessao() {
         $token = $this->loginService->getToken();
@@ -39,7 +49,7 @@ class LaboratorioService {
             throw new Exception("Token de acesso não encontrado.");
         }
 
-        if ($this->findSessaoAtiva() != null) {
+        if (json_decode($this->findSessaoAtiva()) != null) {
             throw new Exception("Já existe uma sessão ativa no momento, tente novamente mais tarde ou agende um horário para utilizar o laboratório.");
         }
 
@@ -50,6 +60,40 @@ class LaboratorioService {
             return json_encode(new Sessao($token->matricula, true, $dtInicio->format("Y-m-d H:i:s"), $dtFim->format("Y-m-d H:i:s")));
         }
         return json_encode($token);
+    }
+    
+    public function startExperimento($body) {
+        $token = $this->loginService->getToken();
+        if ($token == null) {
+            throw new Exception("Token de acesso não encontrado.");
+        }
+        
+        if(!is_numeric($body->codigo)) {
+            throw new Exception("Código do experimento em formato inválido.");
+        }
+        
+        if(count($this->repository->findExperimentoById($body->codigo)) == 0) {
+            throw new Exception("Experimento não encontrado.");
+        }
+        
+        $sessao = json_decode($this->findSessaoAtiva());
+        if($sessao->matricula != $token->matricula) {
+            throw new Exception("Você não é o usuário da sessão atual.");
+        }
+        
+        $dtInicio = new DateTime();
+        $experimentoSessao["cod_sessao"] = $sessao->codigo;
+        $experimentoSessao["cod_experimento"] = $body->codigo;
+        $experimentoSessao["parametros"] = "";
+        $experimentoSessao["dt_inicio"] = $dtInicio->format("Y-m-d H:i:s"); 
+        $experimentoSessao["ativo"] = true;
+        $this->repository->desabilitaExperimentos();
+        $experimentoAtivo = $this->repository->startExperimento($experimentoSessao);
+        if ($experimentoAtivo != false) {
+            return json_encode(new Experimento($experimentoAtivo, $experimentoSessao["cod_sessao"], $experimentoSessao["cod_experimento"], $experimentoSessao["parametros"], $experimentoSessao["dt_inicio"], $experimentoSessao["ativo"]));
+        } else {
+            throw new Exception("Não foi possível criar seu novo experimento, erro ao inserir registro.");
+        }
     }
 
 }

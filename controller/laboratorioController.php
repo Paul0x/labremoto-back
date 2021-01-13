@@ -21,26 +21,51 @@ class LaboratorioController {
     public function __construct() {
         $this->laboratorioService = new LaboratorioService();
     }
-    
+
     public function findSessaoAtiva() {
         try {
-            $body = InputHelper::getBodyJson();
             echo $this->laboratorioService->findSessaoAtiva();
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
-    
+
     public function startSessao() {
         try {
-            echo $this->laboratorioService->startSessao();            
+            echo $this->laboratorioService->startSessao();
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
-
         }
-        
+    }
+
+    public function startExperimento() {
+        try {
+            $body = InputHelper::getBodyJson();
+            echo $this->laboratorioService->startExperimento($body);
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
+    public function findExperimentos() {
+        try {
+            echo $this->laboratorioService->findExperimentos();
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
+    public function getExperimentoAtivo() {
+        try {
+            echo $this->laboratorioService->getExperimentoAtivo();
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
     }
 
 }

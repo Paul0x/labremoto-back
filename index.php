@@ -13,6 +13,8 @@
  */
 
 
+require_once("utils/inputHelper.php");
+
 // Tratamento do CORS
 // Allow from any origin
 if (isset($_SERVER['HTTP_ORIGIN'])) {
