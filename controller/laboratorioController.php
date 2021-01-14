@@ -22,9 +22,9 @@ class LaboratorioController {
         $this->laboratorioService = new LaboratorioService();
     }
 
-    public function findSessaoAtiva() {
+    public function getSessaoAtiva() {
         try {
-            echo $this->laboratorioService->findSessaoAtiva();
+            echo json_encode($this->laboratorioService->getSessaoAtiva());
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
@@ -43,16 +43,16 @@ class LaboratorioController {
     public function startExperimento() {
         try {
             $body = InputHelper::getBodyJson();
-            echo $this->laboratorioService->startExperimento($body);
+            echo json_encode($this->laboratorioService->startExperimento($body));
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
 
-    public function findExperimentos() {
+    public function getExperimentos() {
         try {
-            echo $this->laboratorioService->findExperimentos();
+            echo $this->laboratorioService->getExperimentos();
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
@@ -61,7 +61,27 @@ class LaboratorioController {
 
     public function getExperimentoAtivo() {
         try {
-            echo $this->laboratorioService->getExperimentoAtivo();
+            echo json_encode(($this->laboratorioService->getExperimentoAtivo()));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
+    public function setExperimentoParametros() {
+        try {
+            $body = InputHelper::getBodyJson();
+            echo json_encode($this->laboratorioService->setExperimentoParametro($body));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
+    public function getExperimentoParametros() {
+        try {
+            $codExperimento = filter_input(INPUT_GET, "codigo");
+            echo json_encode($this->laboratorioService->getExperimentoParametros($codExperimento));
         } catch (Exception $ex) {
             http_response_code(400);
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);

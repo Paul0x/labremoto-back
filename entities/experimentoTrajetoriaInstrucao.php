@@ -1,6 +1,6 @@
 <?php
 
-class Experimento {
+class ExperimentoTrajetoriaInstrucao {
 
     public $codigo;
     public $codSessao;

@@ -47,6 +47,7 @@ class Router {
             $method = $class->getMethod($route[1][$method][$requestUrlVars[1]][0]);
             $method->invoke($obj);
         } catch (Exception $ex) {
+            echo $ex->getMessage();
             http_response_code(404);
             echo json_encode(["status" => 404, "error" => "Rota não encontrada"]);
         }

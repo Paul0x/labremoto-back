@@ -40,13 +40,17 @@ class Routes {
         "laboratorio" => ["LaboratorioController",
             [
                 "GET" => [
-                    "sessao-ativa" => ["findSessaoAtiva", []],
-                    "experimentos" => ["findExperimentos", []],
-                    "experimento-ativo" => ["getExperimentoAtivo", []]
+                    "sessao-ativa" => ["getSessaoAtiva", []],
+                    "experimentos" => ["getExperimentos", []],
+                    "experimento-ativo" => ["getExperimentoAtivo", []],
+                    "experimento-parametros" => ["getExperimentoParametros", []],
+                    "experimento-instrucoes" => ["getExperimentoInstrucoes", []]
                 ],
                 "POST" => [
                     "sessao" => ["startSessao", []],
-                    "experimento" => ["startExperimento", []]
+                    "experimento" => ["startExperimento", []],
+                    "experimento-parametros" => ["setExperimentoParametros", []],
+                    "experimento-instrucoes" => ["setExperimentoInstrucoes", []]
                 ],
                 "PUT" => [],
                 "DELETE" => []

@@ -2,6 +2,7 @@
 
 class Sessao {
 
+    public $codigo;
     public $matricula;
     public $ativo;
     public $dtInicio;
@@ -45,5 +46,15 @@ class Sessao {
     function setDtFim($dtFim) {
         $this->dtFim = $dtFim;
     }
+    
+    function getCodigo() {
+        return $this->codigo;
+    }
+
+    function setCodigo($codigo) {
+        $this->codigo = $codigo;
+    }
+
+
 
 }
