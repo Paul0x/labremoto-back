@@ -3,78 +3,90 @@
 class ExperimentoTrajetoriaInstrucao {
 
     public $codigo;
-    public $codSessao;
-    public $codExperimento;
-    public $parametros;
-    public $ativo;
-    public $dtInicio;
-    public $label;
+    public $codSessaoExperimento;
+    public $velLinear;
+    public $velAngular;
+    public $timer;
+    public $dtCriacao;
+    public $dtInicializacao;
+    public $dtFinalizacao;
 
-    function __construct($codigo = "", $codSessao = "", $codExperimento = "", $parametros = "", $dtInicio = "", $ativo = "") {
+    function __construct($codigo = null, $codSessaoExperimento = null, 
+            $velLinear = null, $velAngular = null, $timer = null, 
+            $dtCriacao = null, $dtInicializacao = null, $dtFinalizacao = null) {
         $this->codigo = $codigo;
-        $this->codSessao = $codSessao;
-        $this->codExperimento = $codExperimento;
-        $this->parametros = $parametros;
-        $this->ativo = $ativo;
-        $this->dtInicio = $dtInicio;
+        $this->codSessaoExperimento = $codSessaoExperimento;
+        $this->velLinear = $velLinear;
+        $this->velAngular = $velAngular;
+        $this->timer = $timer;
+        $this->dtCriacao = $dtCriacao;
+        $this->dtInicializacao = $dtInicializacao;
+        $this->dtFinalizacao = $dtFinalizacao;
     }
 
     function getCodigo() {
         return $this->codigo;
     }
 
-    function getCodSessao() {
-        return $this->codSessao;
+    function getCodSessaoExperimento() {
+        return $this->codSessaoExperimento;
     }
 
-    function getCodExperimento() {
-        return $this->codExperimento;
+    function getVelLinear() {
+        return $this->velLinear;
     }
 
-    function getParametros() {
-        return $this->parametros;
+    function getVelAngular() {
+        return $this->velAngular;
     }
 
-    function getAtivo() {
-        return $this->ativo;
+    function getTimer() {
+        return $this->timer;
     }
 
-    function getDtInicio() {
-        return $this->dtInicio;
+    function getDtCriacao() {
+        return $this->dtCriacao;
+    }
+
+    function getDtInicializacao() {
+        return $this->dtInicializacao;
+    }
+
+    function getDtFinalizacao() {
+        return $this->dtFinalizacao;
     }
 
     function setCodigo($codigo) {
         $this->codigo = $codigo;
     }
 
-    function setCodSessao($codSessao) {
-        $this->codSessao = $codSessao;
+    function setCodSessaoExperimento($codSessaoExperimento) {
+        $this->codSessaoExperimento = $codSessaoExperimento;
     }
 
-    function setCodExperimento($codExperimento) {
-        $this->codExperimento = $codExperimento;
+    function setVelLinear($velLinear) {
+        $this->velLinear = $velLinear;
     }
 
-    function setParametros($parametros) {
-        $this->parametros = $parametros;
+    function setVelAngular($velAngular) {
+        $this->velAngular = $velAngular;
     }
 
-    function setAtivo($ativo) {
-        $this->ativo = $ativo;
+    function setTimer($timer) {
+        $this->timer = $timer;
     }
 
-    function setDtInicio($dtInicio) {
-        $this->dtInicio = $dtInicio;
-    }
-    
-    function getLabel() {
-        return $this->label;
+    function setDtCriacao($dtCriacao) {
+        $this->dtCriacao = $dtCriacao;
     }
 
-    function setLabel($label) {
-        $this->label = $label;
+    function setDtInicializacao($dtInicializacao) {
+        $this->dtInicializacao = $dtInicializacao;
     }
 
+    function setDtFinalizacao($dtFinalizacao) {
+        $this->dtFinalizacao = $dtFinalizacao;
+    }
 
 
 }

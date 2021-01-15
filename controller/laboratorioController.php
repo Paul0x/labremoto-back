@@ -88,6 +88,26 @@ class LaboratorioController {
         }
     }
 
+    public function setExperimentoInstrucoes() {
+        try {
+            $body = InputHelper::getBodyJson();
+            echo json_encode($this->laboratorioService->setExperimentoInstrucoes($body));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+    
+    public function getExperimentoInstrucoes() {
+        try {
+            $codSessaoExperimento = filter_input(INPUT_GET, "codigo");
+            echo json_encode($this->laboratorioService->getExperimentoInstrucoes($codSessaoExperimento));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
 }
 
 ?>

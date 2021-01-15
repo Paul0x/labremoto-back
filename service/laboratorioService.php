@@ -204,7 +204,7 @@ class LaboratorioService {
 
     public function getExperimentoParametros($codExperimento) {
         if (!is_numeric($codExperimento)) {
-            throw new Exception("Formato do código do experimento inválido.".$codExperimento);
+            throw new Exception("Formato do código do experimento inválido." . $codExperimento);
         }
 
         $experimento = $this->repository->getSessaoExperimentoById($codExperimento);
@@ -222,6 +222,98 @@ class LaboratorioService {
                         $paramArr["kp"], $paramArr["kd"], $paramArr["ki"]
                         , $paramArr["dt_criacao"]);
         }
+    }
+
+    public function setExperimentoInstrucoes($body) {
+        $token = $this->loginService->getToken();
+        if ($token == null) {
+            throw new Exception("Token de acesso não encontrado.");
+        }
+
+        $sessao = $this->getSessaoAtiva();
+        $experimento = $this->getExperimentoAtivo();
+        if ($sessao->matricula != $token->matricula) {
+            throw new Exception("Você não é o usuário da sessão atual.");
+        }
+        
+        if($experimento->codExperimento != 2) {
+            throw new Exception("Esse tipo de experimento não permite instruções.");
+        }
+
+        if ($experimento->codSessao != $sessao->codigo) {
+            throw new Exception("O experimento não faz parte da sessão atual.");
+        }
+
+        if ($experimento->ativo == false) {
+            throw new Exception("O experimento não está ativo.");
+        }
+
+        if (!$this->repository->deleteInstrucoesByCodSessaoExperimento($experimento->codigo)) {
+            throw new Exception("Não foi possível remover as instruções anteriores.");
+        }
+
+        foreach ($body as $idx => $instrucaoReq) {
+            $instrucao = new ExperimentoTrajetoriaInstrucao();
+            $instrucao->setCodSessaoExperimento($experimento->getCodigo());
+            switch ($instrucaoReq->tipo) {
+                case 1: // Movimento reto
+                    $instrucao->setVelLinear($instrucaoReq->velLinear);
+                    $instrucao->setVelAngular(0);
+                    break;
+                case 2: // Curva
+                    $instrucao->setVelLinear($instrucaoReq->velLinear);
+                    $instrucao->setVelAngular($instrucaoReq->velAngular);
+                    break;
+                case 3: // Rotação
+                    $instrucao->setVelLinear(0);
+
+                    // Cálculo da vel angular
+                    $radAngle = ($instrucaoReq->rotAngulo * pi()) / 180;
+                    $sec = $instrucaoReq->timer / 1000;
+                    $angularVel = $radAngle / $sec;
+
+                    $instrucao->setVelAngular($angularVel);
+                    break;
+                case 4: // Parado
+                    $instrucao->setVelLinear(0);
+                    $instrucao->setVelAngular(0);
+                    break;
+            }
+            $instrucao->timer = $instrucaoReq->timer;
+            if(!$this->repository->setExperimentoInstrucao($instrucao)) {
+                throw new Exception("Ocorreu um erro ao adicionar a instrução. (" . 1+idx . ")");
+            }
+        }
+        
+        return true;
+    }
+    
+    public function getExperimentoInstrucoes($codSessaoExperimento) {
+        if (!is_numeric($codSessaoExperimento)) {
+            throw new Exception("Formato do código do experimento inválido." . $codSessaoExperimento);
+        }
+
+        $experimento = $this->repository->getSessaoExperimentoById($codSessaoExperimento);
+        if($experimento["cod_experimento"] != 2) {
+            throw new Exception("Experimento não suporta instruções.");
+        }
+        
+        $instrucoesArr = $this->repository->getExperimentoInstrucaoByCodSessaoExperimento($codSessaoExperimento);
+        $returnArr = [];
+        foreach($instrucoesArr as $idx => $instrucaoArr) {
+            $instrucao = new ExperimentoTrajetoriaInstrucao();
+            $instrucao->setCodigo($instrucaoArr["codigo"]);
+            $instrucao->setCodSessaoExperimento($instrucaoArr["cod_sessao_experimento"]);
+            $instrucao->setVelLinear($instrucaoArr["velocidade_linear"]);
+            $instrucao->setVelAngular($instrucaoArr["velocidade_angular"]);
+            $instrucao->setTimer($instrucaoArr["timer"]);
+            $instrucao->setDtCriacao($instrucaoArr["dt_criacao"]);
+            $instrucao->setDtInicializacao($instrucaoArr["dt_inicializacao"]);
+            $instrucao->setDtFinalizacao($instrucaoArr["dt_finalizacao"]);
+            $returnArr[] = $instrucao;            
+        }
+        
+        return $returnArr;
     }
 
 }
