@@ -126,6 +126,8 @@ class LaboratorioRepository {
     
     public function updateExperimentoApontarParametro($experimentoApontar) {
         if ($this->db->update("experimento_apontar_parametros", [
+                    "objetivo_x" => $experimentoApontar->getObjetivoX(),
+                    "objetivo_y" => $experimentoApontar->getObjetivoY(),
                     "algoritmo_busca" => $experimentoApontar->getAlgoritmoBusca(),
                     "obstaculos" => $experimentoApontar->getObstaculos(),
                     "kp" => $experimentoApontar->getKp(),
@@ -133,6 +135,16 @@ class LaboratorioRepository {
                     "ki" => $experimentoApontar->getKi(),
                     "tamanho_mapa_busca" => $experimentoApontar->getTamanhoMapaBusca(),
                     "tamanho_area_seguranca" => $experimentoApontar->getTamanhoAreaSeguranca(),
+                ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updateExperimentoApontarObjetivo($experimentoApontar) {
+        if ($this->db->update("experimento_apontar_parametros", [
+                    "objetivo_x" => $experimentoApontar->getObjetivoX(),
+                    "objetivo_y" => $experimentoApontar->getObjetivoY()
                 ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
             return true;
         } else {

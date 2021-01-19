@@ -3,6 +3,8 @@
 class ExperimentoApontarParametros {
     
     public $codSessaoExperimento;
+    public $objetivoX;
+    public $objetivoY;
     public $algoritmoBusca;
     public $obstaculos;
     public $kp;
@@ -95,6 +97,24 @@ class ExperimentoApontarParametros {
     function setDtCriacao($dtCriacao) {
         $this->dtCriacao = $dtCriacao;
     }
+    
+    function getObjetivoX() {
+        return $this->objetivo_x;
+    }
+
+    function getObjetivoY() {
+        return $this->objetivo_y;
+    }
+
+    function setObjetivoX($objetivo_x) {
+        $this->objetivo_x = $objetivo_x;
+    }
+
+    function setObjetivoY($objetivo_y) {
+        $this->objetivo_y = $objetivo_y;
+    }
+
+
 
 
 }

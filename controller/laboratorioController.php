@@ -78,6 +78,16 @@ class LaboratorioController {
         }
     }
 
+    public function setApontarObjetivo() {
+        try {
+            $body = InputHelper::getBodyJson();
+            echo json_encode($this->laboratorioService->setApontarObjetivo($body));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
+
     public function getExperimentoParametros() {
         try {
             $codExperimento = filter_input(INPUT_GET, "codigo");

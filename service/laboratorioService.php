@@ -152,6 +152,8 @@ class LaboratorioService {
                 $params->setKp($body->kp);
                 $params->setKd($body->kd);
                 $params->setKi($body->ki);
+                $params->setObjetivoX($body->objetivoX);
+                $params->setObjetivoY($body->objetivoY);
                 $params->setTamanhoMapaBusca(1);
                 $params->setTamanhoAreaSeguranca(1);
                 $this->validateExperimentoParams($params);
@@ -235,8 +237,8 @@ class LaboratorioService {
         if ($sessao->matricula != $token->matricula) {
             throw new Exception("Você não é o usuário da sessão atual.");
         }
-        
-        if($experimento->codExperimento != 2) {
+
+        if ($experimento->codExperimento != 2) {
             throw new Exception("Esse tipo de experimento não permite instruções.");
         }
 
@@ -280,27 +282,27 @@ class LaboratorioService {
                     break;
             }
             $instrucao->timer = $instrucaoReq->timer;
-            if(!$this->repository->setExperimentoInstrucao($instrucao)) {
-                throw new Exception("Ocorreu um erro ao adicionar a instrução. (" . 1+idx . ")");
+            if (!$this->repository->setExperimentoInstrucao($instrucao)) {
+                throw new Exception("Ocorreu um erro ao adicionar a instrução. (" . 1 + idx . ")");
             }
         }
-        
+
         return true;
     }
-    
+
     public function getExperimentoInstrucoes($codSessaoExperimento) {
         if (!is_numeric($codSessaoExperimento)) {
             throw new Exception("Formato do código do experimento inválido." . $codSessaoExperimento);
         }
 
         $experimento = $this->repository->getSessaoExperimentoById($codSessaoExperimento);
-        if($experimento["cod_experimento"] != 2) {
+        if ($experimento["cod_experimento"] != 2) {
             throw new Exception("Experimento não suporta instruções.");
         }
-        
+
         $instrucoesArr = $this->repository->getExperimentoInstrucaoByCodSessaoExperimento($codSessaoExperimento);
         $returnArr = [];
-        foreach($instrucoesArr as $idx => $instrucaoArr) {
+        foreach ($instrucoesArr as $idx => $instrucaoArr) {
             $instrucao = new ExperimentoTrajetoriaInstrucao();
             $instrucao->setCodigo($instrucaoArr["codigo"]);
             $instrucao->setCodSessaoExperimento($instrucaoArr["cod_sessao_experimento"]);
@@ -310,10 +312,34 @@ class LaboratorioService {
             $instrucao->setDtCriacao($instrucaoArr["dt_criacao"]);
             $instrucao->setDtInicializacao($instrucaoArr["dt_inicializacao"]);
             $instrucao->setDtFinalizacao($instrucaoArr["dt_finalizacao"]);
-            $returnArr[] = $instrucao;            
+            $returnArr[] = $instrucao;
         }
-        
+
         return $returnArr;
+    }
+
+    public function setApontarObjetivo($body) {
+        $token = $this->loginService->getToken();
+        if ($token == null) {
+            throw new Exception("Token de acesso não encontrado.");
+        }
+
+        $sessao = $this->getSessaoAtiva();
+        $experimento = $this->getExperimentoAtivo();
+        if ($sessao->matricula != $token->matricula) {
+            throw new Exception("Você não é o usuário da sessão atual.");
+        }
+
+        if ($experimento->codSessao != $sessao->codigo) {
+            throw new Exception("O experimento não faz parte da sessão atual.");
+        }
+
+        $params = new ExperimentoApontarParametros();
+        $params->setCodSessaoExperimento($experimento->getCodigo());
+        $params->setObjetivoX($body->objetivoX);
+        $params->setObjetivoY($body->objetivoY);
+        return $this->repository->updateExperimentoApontarObjetivo($params);
+
     }
 
 }
