@@ -105,7 +105,7 @@ class LaboratorioService {
         if ($sessao->matricula != $token->matricula) {
             throw new Exception("Você não é o usuário da sessão atual.");
         }
-
+        $this->repository->setPararExperimento();
         $dtInicio = new DateTime();
         $experimentoSessao["cod_sessao"] = $sessao->codigo;
         $experimentoSessao["cod_experimento"] = $body->codigo;
@@ -340,6 +340,38 @@ class LaboratorioService {
         $params->setObjetivoY($body->objetivoY);
         return $this->repository->updateExperimentoApontarObjetivo($params);
 
+    }
+    
+    public function setStatusExperimento($body) {
+        $token = $this->loginService->getToken();
+        if ($token == null) {
+            throw new Exception("Token de acesso não encontrado.");
+        }
+
+        $sessao = $this->getSessaoAtiva();
+        $experimento = $this->getExperimentoAtivo();
+        if ($sessao->matricula != $token->matricula) {
+            throw new Exception("Você não é o usuário da sessão atual.");
+        }
+
+        if ($experimento->codSessao != $sessao->codigo) {
+            throw new Exception("O experimento não faz parte da sessão atual.");
+        }
+        
+        if(!in_array($body->status, [0,1,2])) {
+            throw new Exception("Status inválido");
+        }
+        
+        switch($body->status) {
+            case 0:
+                return $this->repository->setPararExperimento();
+                break;
+            case 1:
+                return $this->repository->setIniciarExperimento();
+                break;
+        }
+        
+        return false;
     }
 
 }

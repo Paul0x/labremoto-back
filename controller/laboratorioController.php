@@ -117,6 +117,16 @@ class LaboratorioController {
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
+    
+    public function setStatusExperimento() {
+        try {
+            $body = InputHelper::getBodyJson();
+            echo json_encode($this->laboratorioService->setStatusExperimento($body));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+        }
+    }
 
 }
 

@@ -24,7 +24,7 @@ class LaboratorioRepository {
     }
 
     public function getSessaoAtiva() {
-        $sessao = $this->db->select('sessao', ["codigo", "ativo","dt_inicio", "dt_fim", "matricula"], ["ativo" => true]);
+        $sessao = $this->db->select('sessao', ["codigo", "ativo", "dt_inicio", "dt_fim", "matricula"], ["ativo" => true]);
         return $sessao;
     }
 
@@ -40,8 +40,7 @@ class LaboratorioRepository {
             return false;
         }
     }
-    
-    
+
     public function startExperimento($experimentoSessao) {
         if ($this->db->insert("sessao_experimento", [
                     "cod_sessao" => $experimentoSessao["cod_sessao"],
@@ -69,29 +68,29 @@ class LaboratorioRepository {
         $experimento = $this->db->select('sessao_experimento', ["codigo", "cod_experimento", "cod_sessao"], ["codigo" => $codigo]);
         return $experimento[0];
     }
-    
+
     public function getExperimentoApontarParamsByCodSessaoExperimento($codigo) {
         $params = $this->db->select('experimento_apontar_parametros',
                 ["cod_sessao_experimento", "algoritmo_busca", "kp", "kd", "ki", "obstaculos", "dt_criacao"],
                 ["cod_sessao_experimento" => $codigo]);
         return $params[0];
-    }  
-    
+    }
+
     public function getExperimentoTrajetoriaParamsByCodSessaoExperimento($codigo) {
         $params = $this->db->select('experimento_trajetoria_parametros',
                 ["cod_sessao_experimento", "kp", "kd", "ki", "obstaculos", "dt_criacao"],
                 ["cod_sessao_experimento" => $codigo]);
         return $params[0];
-    }    
-    
+    }
+
     public function desabilitaExperimentos() {
         return $this->db->update("sessao_experimento", ["ativo" => false], ["ativo" => true]);
     }
-    
+
     public function getExperimentoAtivo() {
         return $this->db->query('SELECT a.codigo, a.cod_sessao, a.cod_experimento, a.parametros, a.dt_inicio, a.ativo, e.label as label FROM sessao_experimento a INNER JOIN experimento e ON a.cod_experimento = e.codigo WHERE a.ativo = true')->fetchAll();
     }
-    
+
     public function createExperimentoApontarParametro($experimentoApontar) {
         if ($this->db->insert("experimento_apontar_parametros", [
                     "cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento(),
@@ -108,8 +107,7 @@ class LaboratorioRepository {
             return false;
         }
     }
-    
-    
+
     public function createExperimentoTrajetoriaParametro($experimentoTrajetoria) {
         if ($this->db->insert("experimento_trajetoria_parametros", [
                     "cod_sessao_experimento" => $experimentoTrajetoria->getCodSessaoExperimento(),
@@ -123,7 +121,7 @@ class LaboratorioRepository {
             return false;
         }
     }
-    
+
     public function updateExperimentoApontarParametro($experimentoApontar) {
         if ($this->db->update("experimento_apontar_parametros", [
                     "objetivo_x" => $experimentoApontar->getObjetivoX(),
@@ -135,46 +133,45 @@ class LaboratorioRepository {
                     "ki" => $experimentoApontar->getKi(),
                     "tamanho_mapa_busca" => $experimentoApontar->getTamanhoMapaBusca(),
                     "tamanho_area_seguranca" => $experimentoApontar->getTamanhoAreaSeguranca(),
-                ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
+                        ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
             return true;
         } else {
             return false;
         }
     }
+
     public function updateExperimentoApontarObjetivo($experimentoApontar) {
         if ($this->db->update("experimento_apontar_parametros", [
                     "objetivo_x" => $experimentoApontar->getObjetivoX(),
                     "objetivo_y" => $experimentoApontar->getObjetivoY()
-                ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
+                        ], ["cod_sessao_experimento" => $experimentoApontar->getCodSessaoExperimento()]) == true) {
             return true;
         } else {
             return false;
         }
     }
-    
-    
+
     public function updateExperimentoTrajetoriaParametro($experimentoTrajetoria) {
         if ($this->db->update("experimento_trajetoria_parametros", [
                     "obstaculos" => $experimentoTrajetoria->getObstaculos(),
                     "kp" => $experimentoTrajetoria->getKp(),
                     "kd" => $experimentoTrajetoria->getKd(),
                     "ki" => $experimentoTrajetoria->getKi(),
-                ], ["cod_sessao_experimento" => $experimentoTrajetoria->getCodSessaoExperimento()]) == true) {
+                        ], ["cod_sessao_experimento" => $experimentoTrajetoria->getCodSessaoExperimento()]) == true) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     public function deleteInstrucoesByCodSessaoExperimento($codSessaoExperimento) {
         if ($this->db->delete("experimento_trajetoria_instrucoes", ["cod_sessao_experimento" => $codSessaoExperimento]) == true) {
             return true;
         } else {
             return false;
         }
-        
     }
-    
+
     public function setExperimentoInstrucao($instrucao) {
         if ($this->db->insert("experimento_trajetoria_instrucoes", [
                     "cod_sessao_experimento" => $instrucao->getCodSessaoExperimento(),
@@ -187,13 +184,29 @@ class LaboratorioRepository {
             return false;
         }
     }
-    
+
     public function getExperimentoInstrucaoByCodSessaoExperimento($codSessaoExperimento) {
         return $this->db->select("experimento_trajetoria_instrucoes",
-                ["codigo", "cod_sessao_experimento", "velocidade_linear", "velocidade_angular",
-                    "timer", "dt_criacao", "dt_inicializacao", "dt_finalizacao"],[
-                        "cod_sessao_experimento" => $codSessaoExperimento
-                ]);
+                        ["codigo", "cod_sessao_experimento", "velocidade_linear", "velocidade_angular",
+                            "timer", "dt_criacao", "dt_inicializacao", "dt_finalizacao"], [
+                    "cod_sessao_experimento" => $codSessaoExperimento
+        ]);
+    }
+
+    public function setPararExperimento() {
+        if ($this->db->update("configuracoes", ["valor" => 0], ["label" => "experimento_status"]) == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function setIniciarExperimento() {
+        if($this->db->update("configuracoes", ["valor" => 1], ["label" => "experimento_status"]) == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

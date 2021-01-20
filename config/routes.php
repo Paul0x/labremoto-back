@@ -51,7 +51,8 @@ class Routes {
                     "experimento" => ["startExperimento", []],
                     "experimento-parametros" => ["setExperimentoParametros", []],
                     "experimento-instrucoes" => ["setExperimentoInstrucoes", []],
-                    "experimento-objetivo" => ["setApontarObjetivo", []]
+                    "experimento-objetivo" => ["setApontarObjetivo", []],
+                    "experimento-status" => ["setStatusExperimento", []]
                 ],
                 "PUT" => [],
                 "DELETE" => []
