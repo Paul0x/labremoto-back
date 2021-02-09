@@ -127,6 +127,27 @@ class LaboratorioController {
             echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
         }
     }
+    
+    public function getExperimentoResults() {
+        try {
+            $codSessaoExperimento = filter_input(INPUT_GET, "codigo");
+            echo json_encode($this->laboratorioService->getExperimentoResults($codSessaoExperimento));
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+
+        }
+    }
+    
+    public function encerrarExperimento() {
+        try {
+            echo json_encode($this->laboratorioService->encerrarExperimento());
+        } catch (Exception $ex) {
+            http_response_code(400);
+            echo json_encode(["status" => 400, "error" => $ex->getMessage()]);
+
+        }
+    }
 
 }
 

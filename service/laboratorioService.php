@@ -18,6 +18,7 @@ require_once __DIR__ . '/../entities/experimento.php';
 require_once __DIR__ . '/../entities/experimentoApontarParametros.php';
 require_once __DIR__ . '/../entities/experimentoTrajetoriaParametros.php';
 require_once __DIR__ . '/../entities/experimentoTrajetoriaInstrucao.php';
+require_once __DIR__ . '/../entities/experimentoResultado.php';
 
 class LaboratorioService {
 
@@ -372,6 +373,49 @@ class LaboratorioService {
         }
         
         return false;
+    }
+    
+    public function getExperimentoResults($codExperimento) {
+        if (!is_numeric($codExperimento)) {
+            throw new Exception("Formato do código do experimento inválido." . $codExperimento);
+        }
+
+        $resultsArr = $this->repository->getExperimentoResultsByCodSessaoExperimento($codExperimento);
+        $returnArr = [];
+        foreach($resultsArr as $i => $res) {
+            $returnArr[] = new ExperimentoResultado(
+                    $res["codigo"],$res["cod_sessao_experimento"],
+                    $res["pos_x"],$res["pos_y"],
+                    $res["linear_vel"],$res["angular_vel"],
+                    $res["experimento_starttime"],
+                    json_decode($res["data"]),$res["dt_criacao"]
+                    );
+        }
+        
+        return $returnArr;       
+    }
+    
+    
+    public function encerrarExperimento() {
+        $token = $this->loginService->getToken();
+        if ($token == null) {
+            throw new Exception("Token de acesso não encontrado.");
+        }
+
+        $sessao = $this->getSessaoAtiva();
+        $experimento = $this->getExperimentoAtivo();
+        if ($sessao->matricula != $token->matricula) {
+            throw new Exception("Você não é o usuário da sessão atual.");
+        }
+
+        if ($experimento->codSessao != $sessao->codigo) {
+            throw new Exception("O experimento não faz parte da sessão atual.");
+        }
+        
+        if(!$this->repository->encerrarExperimento()) {
+            throw new Exception("Não foi possível encerrar o experimento.");
+        }
+        return true;
     }
 
 }

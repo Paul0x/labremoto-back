@@ -208,6 +208,30 @@ class LaboratorioRepository {
             return false;
         }
     }
+    
+    public function getExperimentoResultsByCodSessaoExperimento($codSessaoExperimento) {
+        return $this->db->select("experimento_resultados",
+                        ["codigo", "cod_sessao_experimento", "pos_x", "pos_y",
+                            "linear_vel", "angular_vel", "experimento_starttime",
+                            "data", "dt_criacao"], [
+                    "cod_sessao_experimento" => $codSessaoExperimento
+        ]);
+    }
+
+    public function encerrarExperimento() {
+        if($this->db->update("sessao_experimento", ["ativo" => 1], ["ativo" => "0"]) == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function listSessaoExperimentoByCodSessaoExperimento($codSessao) {
+        return $this->db->select("experimento_resultados",
+                        ["codigo", "cod_experimento"], [
+                    "cod_sessao" => $codSessao
+        ]);
+    }
 
 }
 ?>  

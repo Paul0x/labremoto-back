@@ -44,7 +44,9 @@ class Routes {
                     "experimentos" => ["getExperimentos", []],
                     "experimento-ativo" => ["getExperimentoAtivo", []],
                     "experimento-parametros" => ["getExperimentoParametros", []],
-                    "experimento-instrucoes" => ["getExperimentoInstrucoes", []]
+                    "experimento-instrucoes" => ["getExperimentoInstrucoes", []],
+                    "experimento-resultados" => ["getExperimentoResults", []],
+                    "encerrar-experimento" => ["encerrarExperimento", []]
                 ],
                 "POST" => [
                     "sessao" => ["startSessao", []],

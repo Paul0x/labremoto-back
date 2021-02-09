@@ -6,8 +6,8 @@
             <file>file:/var/www/html/labremoto/controller/laboratorioController.php</file>
             <file>file:/var/www/html/labremoto/service/laboratorioService.php</file>
             <file>file:/var/www/html/labremoto/config/routes.php</file>
+            <file>file:/var/www/html/labremoto/entities/experimentoResultado.php</file>
             <file>file:/var/www/html/labremoto/repository/laboratorioRepository.php</file>
-            <file>file:/var/www/html/labremoto/entities/experimento.php</file>
         </group>
     </open-files>
 </project-private>
