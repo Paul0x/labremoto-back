@@ -25,6 +25,7 @@
  */
 
 class Routes {
+
     static $routes = [
         "login" => ["LoginController",
             [
@@ -33,6 +34,16 @@ class Routes {
                 ],
                 "POST" => [
                     "" => ["authUser", []]
+                ],
+                "PUT" => [],
+                "DELETE" => []
+            ]],
+        "historico" => ["HistoricoController",
+            [
+                "GET" => [
+                    "list" => ["getExperimentosMatricula", []]
+                ],
+                "POST" => [
                 ],
                 "PUT" => [],
                 "DELETE" => []
