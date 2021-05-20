@@ -48,6 +48,17 @@ class Routes {
                 "PUT" => [],
                 "DELETE" => []
             ]],
+        "agenda" => ["AgendaController",
+            [
+                "GET" => [
+                    "list-usuario" => ["getAgendaUsuario", []],
+                    "list" => ["getAgendaFull", []]
+                ],
+                "POST" => [
+                ],
+                "PUT" => [],
+                "DELETE" => []
+            ]],
         "laboratorio" => ["LaboratorioController",
             [
                 "GET" => [
